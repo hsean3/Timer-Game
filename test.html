@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+
+        .game-container {
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        #timer-display {
+            font-size: 48px;
+            margin: 20px;
+            color: #333;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result-display {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Try to stop the timer at exactly 5.000 seconds!</h1>
+        <div id="timer-display">0.000</div>
+        <button id="start-stop-btn">Start</button>
+        <div id="result-display"></div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const display = document.getElementById('timer-display');
+    const resultDisplay = document.getElementById('result-display');
+    const button = document.getElementById('start-stop-btn');
+    let timer = null;
+    let startTime;
+
+    function updateTimer() {
+        const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(3);
+        display.textContent = elapsedTime;
+    }
+
+    function evaluateScore(time) {
+        if (time >= 4.5 && time < 5.00) {
+            return 4.999;
+        } else if (time > 5.00 && time <= 5.5) {
+            return 5.001;
+        } else {
+            return time;
+        }
+    }
+
+    button.addEventListener('click', function () {
+        if (button.textContent === 'Start') {
+            startTime = Date.now();
+            timer = setInterval(updateTimer, 10);
+            button.textContent = 'Stop';
+            resultDisplay.textContent = '';
+        } else {
+            clearInterval(timer);
+            const finalTime = parseFloat(display.textContent);
+            const scoredTime = evaluateScore(finalTime);
+            display.textContent = scoredTime.toFixed(3);
+            button.textContent = 'Start';
+            resultDisplay.textContent = scoredTime === 5.000 ? 'Perfect timing!' : 'Try again!';
+        }
+    });
+});
+    </script>
+</body>
+</html>
